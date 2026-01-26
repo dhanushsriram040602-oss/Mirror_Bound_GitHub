@@ -1,0 +1,88 @@
+═══════════════════════════════════════════════════════════════
+  ⭐ SIMPLE STAR SYSTEM SETUP - FOLLOW THESE EXACT STEPS ⭐
+═══════════════════════════════════════════════════════════════
+
+🎯 DO THIS FOR EVERY LEVEL SCENE (Level_1, Level_2, etc.)
+
+═══════════════════════════════════════════════════════════════
+STEP 1: Open Your Level
+═══════════════════════════════════════════════════════════════
+
+1. In Project window, go to: Assets → Scenes
+2. Double-click "Level_1.unity" to open it
+
+═══════════════════════════════════════════════════════════════
+STEP 2: Add Star System (Takes 5 seconds!)
+═══════════════════════════════════════════════════════════════
+
+1. At the TOP of Unity, click: Tools
+2. Click: Star Rating System
+3. Click: Add to Current Scene
+
+✅ You'll see "StarRatingSystem" appear in Hierarchy!
+
+═══════════════════════════════════════════════════════════════
+STEP 3: Set Time Limits (In Inspector)
+═══════════════════════════════════════════════════════════════
+
+1. In Hierarchy, click "LevelSettings"
+2. Look at Inspector on the right
+3. Find these numbers and change them:
+   
+   Three Star Time: 30
+   Two Star Time: 60
+
+   (You can make them easier or harder later!)
+
+═══════════════════════════════════════════════════════════════
+STEP 4: Connect Time Display (One time only!)
+═══════════════════════════════════════════════════════════════
+
+1. In Hierarchy, expand: Canvas → WinPanel
+2. You should see "Time text" 
+3. In Hierarchy, click "Canvas"
+4. In Inspector, find "Win Menu" component
+5. Find empty box that says "Time Text"
+6. DRAG "Time text" from Hierarchy into that box
+
+═══════════════════════════════════════════════════════════════
+STEP 5: Save and Test!
+═══════════════════════════════════════════════════════════════
+
+1. Press Ctrl+S (or Cmd+S on Mac) to save
+2. Press the PLAY ▶️ button at the top
+3. Complete the level FAST (under 30 seconds)
+4. You should see:
+   - 3 yellow stars ⭐⭐⭐
+   - "Time: X.XXs" text
+
+═══════════════════════════════════════════════════════════════
+🐛 TROUBLESHOOTING - If it's NOT working:
+═══════════════════════════════════════════════════════════════
+
+Problem: Still getting 1 star even when fast
+Fix: Open Window → General → Console and check for RED errors
+
+Problem: Time shows 0.00s
+Fix: Make sure you did Step 2 (Add StarRatingSystem)
+
+Problem: No stars showing at all
+Fix: In Hierarchy, click Canvas → Find WinMenu component
+     → Check that Star Images array has 3 items
+
+═══════════════════════════════════════════════════════════════
+✅ COPY TO OTHER LEVELS
+═══════════════════════════════════════════════════════════════
+
+After Level_1 works:
+
+1. Open Level_2
+2. Do Step 2 again (Add StarRatingSystem)
+3. Adjust time limits in Step 3
+4. Done! (Time text is already connected)
+
+Repeat for all your levels!
+
+═══════════════════════════════════════════════════════════════
+
+That's it! If you follow these 5 steps, stars will work! 🌟
