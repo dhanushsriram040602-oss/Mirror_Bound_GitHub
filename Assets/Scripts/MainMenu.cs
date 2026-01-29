@@ -105,10 +105,7 @@ public class MainMenu : MonoBehaviour
         waitingForInput = false;
         HideAllPanels();
 
-        if (settingsPanel != null)
-        {
-            settingsPanel.SetActive(true);
-        }
+        settingsPanel.SetActive(true);
     }
 
     public void QuitGame()

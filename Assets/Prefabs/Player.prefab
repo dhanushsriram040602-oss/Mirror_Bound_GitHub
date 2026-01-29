@@ -65,6 +65,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6996290017512513088
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -83,6 +84,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -104,9 +107,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -116,7 +121,6 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5840205593240385945
 GameObject:
@@ -128,7 +132,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6711686196480565402}
   - component: {fileID: 1478452258444831750}
-  - component: {fileID: 666028942098500934}
+  - component: {fileID: 4482682559721591160}
+  - component: {fileID: 1650829696853606376}
   - component: {fileID: 8610555594715569668}
   - component: {fileID: 3255795879094932164}
   m_Layer: 0
@@ -158,6 +163,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1478452258444831750
 SpriteRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -176,6 +182,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -197,9 +205,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_Sprite: {fileID: -5177388603050735206, guid: 71ebafeef3c03457483266a33ab2b270, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -209,9 +219,8 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &666028942098500934
+--- !u!114 &4482682559721591160
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,37 +229,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 5840205593240385945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 776e819123a60c84e9a10087d7f0a813, type: 3}
+  m_Script: {fileID: 11500000, guid: 1368fffb4a53a104dbc8e9e831aef776, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerCtrl
   modelTransform: {fileID: 6711686196480565402}
   eyeTransform: {fileID: 6214480385112929525}
-  maxMoveSpeed: 10
-  acceleration: 60
-  deceleration: 60
-  jumpForce: 8
-  fallGravityMultiplier: 3.5
-  lowJumpMultiplier: 2
+  maxMoveSpeed: 6
+  acceleration: 100
+  deceleration: 100
+  jumpForce: 9
+  fallGravityMultiplier: 4
+  lowJumpMultiplier: 4
   coyoteTime: 0.1
   jumpBufferTime: 0.1
+  cameraMargin: 1
+  squashRecoverySpeed: 1
+  jumpStretchAmount: 0.4
+  landSquashAmount: 0.4
+  moveBobSpeed: 15
+  moveBobAmount: 0.05
   groundCheck: {fileID: 2055779759752990186}
-  groundCheckRadius: 0.2
+  groundCheckRadius: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 192
-  minX: -13.34
-  maxX: 200
-  minY: -7.85
-  maxY: 50
-  squashRecoverySpeed: 3
-  jumpStretchAmount: 0.7
-  landSquashAmount: 0.4
-  moveBobSpeed: 24.5
-  moveBobAmount: 0.7
-  jumpParticlePrefab: {fileID: 3327639627585473369, guid: 75b72123030556c4ebf89134f0fd6fbf, type: 3}
-  deathParticlePrefab: {fileID: 1867589525061250673, guid: 0ed5717a902d87f498c9cbf83262101a, type: 3}
-  moveDustEffect: {fileID: 5258834279355818738, guid: ca6907ec517745b48b96101108a35b25, type: 3}
-  dustSpawnRate: 0.2
+--- !u!114 &1650829696853606376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5840205593240385945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62e5a99db6325414d952e8c1b3baa22a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
 --- !u!61 &8610555594715569668
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -320,7 +334,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4

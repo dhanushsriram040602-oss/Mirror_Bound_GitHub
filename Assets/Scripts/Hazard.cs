@@ -4,33 +4,23 @@ public class Hazard : MonoBehaviour
 {
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                if (AudioManager.Instance != null)
-                {
-                    AudioManager.Instance.PlayDie();
-                }
-                player.Die();
-            }
-        }
+        TryKill(collision.collider);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.CompareTag("Player"))
+        TryKill(other);
+    }
+
+    void TryKill(Collider2D col)
+    {
+        if (!col.CompareTag("Player"))
+            return;
+
+        PlayerCtrl player = col.GetComponent<PlayerCtrl>();
+        if (player != null)
         {
-            PlayerController player = collision.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                if (AudioManager.Instance != null)
-                {
-                    AudioManager.Instance.PlayDie();
-                }
-                player.Die();
-            }
+            player.Die();
         }
     }
 }

@@ -1,5 +1,6 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEditor.Build;
+using UnityEngine;
 
 [InitializeOnLoad]
 public class ProjectInputOptimizer
@@ -19,13 +20,16 @@ public class ProjectInputOptimizer
             madeChanges = true;
         }
 
-        #if UNITY_2023_1_OR_NEWER
-        if (PlayerSettings.GetMobileMTRendering(BuildTargetGroup.Android) == false)
+#if UNITY_2023_1_OR_NEWER
+        var androidTarget = NamedBuildTarget.Android;
+
+        if (!PlayerSettings.GetMobileMTRendering(androidTarget))
         {
-            PlayerSettings.SetMobileMTRendering(BuildTargetGroup.Android, true);
+            PlayerSettings.SetMobileMTRendering(androidTarget, true);
             madeChanges = true;
         }
-        #endif
+#endif
+
 
         if (madeChanges)
         {

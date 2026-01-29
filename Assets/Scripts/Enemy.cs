@@ -1,63 +1,60 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(Collider2D))]
 public class Enemy : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 2f;
     public float patrolDistance = 3f;
 
-    private Vector3 startPos;
-    private int direction = 1;
-    private SpriteRenderer sr;
-    private string currentSceneName;
+    Vector3 startPos;
+    int direction = 1;
+    SpriteRenderer sr;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
-    }
-
-    void Start()
-    {
         startPos = transform.position;
-        currentSceneName = SceneManager.GetActiveScene().name;
     }
 
     void Update()
     {
-        float distanceFromStart = transform.position.x - startPos.x;
+        float offset = transform.position.x - startPos.x;
 
-        if (distanceFromStart > patrolDistance && direction > 0)
-        {
-            direction = -1;
-            FlipSprite();
-        }
-        else if (distanceFromStart < -patrolDistance && direction < 0)
-        {
-            direction = 1;
-            FlipSprite();
-        }
+        if (offset > patrolDistance && direction > 0)
+            TurnAround();
+        else if (offset < -patrolDistance && direction < 0)
+            TurnAround();
 
-        transform.Translate(Vector2.right * direction * speed * Time.deltaTime);
+        transform.position += Vector3.right * direction * speed * Time.deltaTime;
     }
 
-    private void FlipSprite()
+    void TurnAround()
     {
+        direction *= -1;
         if (sr != null)
-        {
-            sr.flipX = (direction < 0);
-        }
+            sr.flipX = direction < 0;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        TryKill(collision.collider);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        TryKill(other);
+    }
+
+    void TryKill(Collider2D col)
+    {
+        if (!col.CompareTag("Player"))
+            return;
+
+        PlayerCtrl player = col.GetComponent<PlayerCtrl>();
+        if (player != null)
         {
-            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
-            if (player != null)
-            {
-                player.Die();
-            }
+            player.Die();
         }
     }
 }
