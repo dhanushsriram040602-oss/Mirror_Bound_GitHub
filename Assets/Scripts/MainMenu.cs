@@ -13,6 +13,8 @@ public class MainMenu : MonoBehaviour
     [Header("Other Panels")]
     public GameObject worldSelectPanel;
     public GameObject levelSelectPanel;
+    public GameObject settingsPanel;
+   
 
     [Header("Settings")]
     public float inputDelayAfterClick = 0.1f;
@@ -98,6 +100,17 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    public void ShowSettingsPanel()
+    {
+        waitingForInput = false;
+        HideAllPanels();
+
+        if (settingsPanel != null)
+        {
+            settingsPanel.SetActive(true);
+        }
+    }
+
     public void QuitGame()
     {
         Application.Quit();
@@ -158,5 +171,6 @@ public class MainMenu : MonoBehaviour
         if (instructionPanelMobile != null) instructionPanelMobile.SetActive(false);
         if (worldSelectPanel != null) worldSelectPanel.SetActive(false);
         if (levelSelectPanel != null) levelSelectPanel.SetActive(false);
+        if (settingsPanel != null) settingsPanel.SetActive(false);
     }
 }
