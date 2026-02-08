@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
 
     [Header("Settings")]
     public float inputDelayAfterClick = 0.1f;
+    public bool playClickSound = true;
 
     private bool waitingForInput;
     private const string LEVEL_SELECT_KEY = "OpenLevelSelect";
@@ -45,6 +46,19 @@ public class MainMenu : MonoBehaviour
     {
         waitingForInput = false;
         HideAllPanels();
+
+        if (mainMenuPanel != null)
+        {
+            mainMenuPanel.SetActive(true);
+        }
+    }
+
+    public void SettingsCrossShowMainMenu()// This is function is using to go back to main menu by the cross button with the sound
+    {
+        waitingForInput = false;
+        HideAllPanels();
+
+        AudioManager.Instance.PlayClick();
 
         if (mainMenuPanel != null)
         {
@@ -104,6 +118,7 @@ public class MainMenu : MonoBehaviour
     {
         waitingForInput = false;
         HideAllPanels();
+        AudioManager.Instance.PlayClick();
 
         settingsPanel.SetActive(true);
     }
