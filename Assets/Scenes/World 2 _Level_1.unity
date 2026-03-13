@@ -1125,11 +1125,11 @@ PrefabInstance:
     - target: {fileID: 2460937842115541465, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 2460937842115541465, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 2460937842115541465, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MobileMoveLeft
@@ -1141,11 +1141,11 @@ PrefabInstance:
     - target: {fileID: 3502330365071888138, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 3502330365071888138, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 3502330365071888138, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MobileJumpDown
@@ -1169,7 +1169,7 @@ PrefabInstance:
     - target: {fileID: 7251670943245565933, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 7251670943245565933, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MobileToggleReality
@@ -1181,11 +1181,11 @@ PrefabInstance:
     - target: {fileID: 9120189845434446089, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 9120189845434446089, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5587031916003740971}
+      objectReference: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     - target: {fileID: 9120189845434446089, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: MobileMoveRight
@@ -1280,6 +1280,18 @@ PrefabInstance:
       propertyPath: jumpForce
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
+      propertyPath: moveDustEffect
+      value: 
+      objectReference: {fileID: 5258834279355818738, guid: ca6907ec517745b48b96101108a35b25, type: 3}
+    - target: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
+      propertyPath: jumpParticlePrefab
+      value: 
+      objectReference: {fileID: 3327639627585473369, guid: 75b72123030556c4ebf89134f0fd6fbf, type: 3}
+    - target: {fileID: 4482682559721591160, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
+      propertyPath: deathParticlePrefab
+      value: 
+      objectReference: {fileID: 1867589525061250673, guid: 0ed5717a902d87f498c9cbf83262101a, type: 3}
     - target: {fileID: 5840205593240385945, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1329,17 +1341,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
---- !u!114 &5587031916003740971 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 666028942098500934, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
-  m_PrefabInstance: {fileID: 5587031916003740970}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 776e819123a60c84e9a10087d7f0a813, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &5587031916003740972 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6711686196480565402, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}

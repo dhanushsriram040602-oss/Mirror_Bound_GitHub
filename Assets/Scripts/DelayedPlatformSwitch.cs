@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class DelayedPlatformSelfSwitch : MonoBehaviour
+public class DelayedPlatformSwitch : MonoBehaviour
 {
     [Header("Delay Settings")]
     public float activationDelay = 0.6f;

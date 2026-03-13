@@ -18,10 +18,10 @@ public class RunFixNow
             CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
             if (scaler != null && scaler.referenceResolution.x == 800)
             {
-                scaler.referenceResolution = new Vector2(1920, 1080);
+                scaler.referenceResolution = new Vector2(800, 600);
                 scaler.matchWidthOrHeight = 0.5f;
                 EditorUtility.SetDirty(scaler);
-                Debug.Log("<color=cyan>✅ Canvas Scaler fixed: 1920x1080, Match=0.5</color>");
+                Debug.Log("<color=cyan>✅ Canvas Scaler fixed: 800x600, Match=0.5</color>");
 
                 RectTransform[] allRects = Object.FindObjectsByType<RectTransform>(FindObjectsSortMode.None);
                 int count = 0;

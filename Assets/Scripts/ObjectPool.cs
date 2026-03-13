@@ -27,7 +27,7 @@ public class ObjectPool<T> where T : Component
     {
         for (int i = 0; i < initialSize; i++)
         {
-            CreateNewObject();
+            availableObjects.Enqueue(CreateNewObject());
         }
     }
 
@@ -35,8 +35,7 @@ public class ObjectPool<T> where T : Component
     {
         T newObj = Object.Instantiate(prefab, parent);
         newObj.gameObject.SetActive(false);
-        availableObjects.Enqueue(newObj);
-        return newObj;
+        return newObj; // Caller is responsible for enqueuing or using directly
     }
 
     public T Get(Vector3 position, Quaternion rotation)
@@ -49,8 +48,7 @@ public class ObjectPool<T> where T : Component
         }
         else if (expandable)
         {
-            obj = CreateNewObject();
-            availableObjects.Dequeue();
+            obj = CreateNewObject(); // Expand: create without adding to queue
         }
         else
         {

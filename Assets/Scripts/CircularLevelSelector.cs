@@ -1,14 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections.Generic;
 
 public class CircularLevelSelector : MonoBehaviour
 {
     [Header("Level Settings")]
-    [Tooltip("Total number of levels in your game")]
-    public int totalLevels = 13;
+    [Tooltip("Number of levels per world (must match WorldManager.LEVELS_PER_WORLD)")]
+    public int totalLevels = 10;
 
     [Header("Button Prefab")]
     [Tooltip("Drag your Level Button prefab here")]
@@ -54,6 +55,10 @@ public class CircularLevelSelector : MonoBehaviour
     private float offsetVelocity = 0f;
     private int selectedLevelIndex = 0;
 
+    // World-aware level tracking
+    private int currentWorld = 1;
+    private int worldStartGlobalLevel = 1;
+
     private Vector2 touchStartPos;
     private bool isDragging = false;
     private float dragStartOffset;
@@ -64,6 +69,13 @@ public class CircularLevelSelector : MonoBehaviour
 
     void Start()
     {
+        // Resolve which world is active and where its levels start globally
+        if (WorldManager.Instance != null)
+        {
+            currentWorld           = WorldManager.Instance.currentWorld;
+            worldStartGlobalLevel  = WorldManager.LEVELS_PER_WORLD * (currentWorld - 1) + 1;
+        }
+
         CreateLevelButtons();
         selectedLevelIndex = 0;
         targetOffset = 0f;
@@ -80,7 +92,8 @@ public class CircularLevelSelector : MonoBehaviour
 
         for (int i = 1; i <= totalLevels; i++)
         {
-            int levelIndex = i;
+            int localLevel  = i;
+            int globalLevel = worldStartGlobalLevel + i - 1;
 
             GameObject btnObj = Instantiate(levelButtonPrefab, transform);
 
@@ -94,22 +107,16 @@ public class CircularLevelSelector : MonoBehaviour
                 continue;
             }
 
-            bool isUnlocked = false;
-            if (LevelManager.Instance != null)
-            {
-                isUnlocked = LevelManager.Instance.IsLevelUnlocked(levelIndex);
-            }
-            else
-            {
-                isUnlocked = (i == 1);
-            }
+            bool isUnlocked = LevelManager.Instance != null
+                ? LevelManager.Instance.IsLevelUnlocked(globalLevel)
+                : (i == 1);
 
             if (isUnlocked)
             {
-                if (txt != null) txt.text = levelIndex.ToString();
+                if (txt != null) txt.text = localLevel.ToString();
                 btn.interactable = true;
                 btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => OnLevelButtonClicked(levelIndex));
+                btn.onClick.AddListener(() => OnLevelButtonClicked(localLevel));
             }
             else
             {
@@ -132,57 +139,57 @@ public class CircularLevelSelector : MonoBehaviour
 
     void HandleTouchInput()
     {
-        // =====================================================
-        // MOBILE TOUCH INPUT (Keep this for mobile/tablet)
-        // =====================================================
-        if (Input.touchCount > 0)
+        // ── Mobile touch (new Input System) ──────────────────────────────────
+        if (Touchscreen.current != null)
         {
-            Touch touch = Input.GetTouch(0);
+            var touch = Touchscreen.current.primaryTouch;
 
-            if (touch.phase == TouchPhase.Began)
+            if (touch.press.wasPressedThisFrame)
             {
-                touchStartPos = touch.position;
-                isDragging = true;
+                touchStartPos  = touch.position.ReadValue();
+                isDragging     = true;
                 dragStartOffset = targetOffset;
             }
-            else if (touch.phase == TouchPhase.Moved && isDragging)
+            else if (touch.press.isPressed && isDragging)
             {
-                float dragDistance = touch.position.x - touchStartPos.x;
-                targetOffset = dragStartOffset + dragDistance;
+                float dragDistance = touch.position.ReadValue().x - touchStartPos.x;
+                targetOffset  = dragStartOffset + dragDistance;
                 offsetVelocity = 0f;
             }
-            else if (touch.phase == TouchPhase.Ended && isDragging)
+            else if (touch.press.wasReleasedThisFrame && isDragging)
+            {
+                isDragging = false;
+                SnapToNearestLevel();
+            }
+
+            return; // Touchscreen present — skip mouse fallback
+        }
+
+        // ── Editor / PC mouse fallback ────────────────────────────────────────
+#if UNITY_EDITOR || UNITY_STANDALONE
+        if (Mouse.current != null)
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                touchStartPos   = mousePos;
+                isDragging      = true;
+                dragStartOffset = targetOffset;
+            }
+            else if (Mouse.current.leftButton.isPressed && isDragging)
+            {
+                float dragDistance = mousePos.x - touchStartPos.x;
+                targetOffset   = dragStartOffset + dragDistance;
+                offsetVelocity = 0f;
+            }
+            else if (Mouse.current.leftButton.wasReleasedThisFrame && isDragging)
             {
                 isDragging = false;
                 SnapToNearestLevel();
             }
         }
-
-        // =====================================================
-        // MOUSE INPUT FOR TESTING (Remove this section when building for mobile!)
-        // START OF TESTING CODE - DELETE BEFORE MOBILE BUILD
-        // =====================================================
-#if UNITY_EDITOR || UNITY_STANDALONE
-        if (Input.GetMouseButtonDown(0))
-        {
-            touchStartPos = Input.mousePosition;
-            isDragging = true;
-            dragStartOffset = targetOffset;
-        }
-        else if (Input.GetMouseButton(0) && isDragging)
-        {
-            float dragDistance = Input.mousePosition.x - touchStartPos.x;
-            targetOffset = dragStartOffset + dragDistance;
-            offsetVelocity = 0f;
-        }
-        else if (Input.GetMouseButtonUp(0) && isDragging)
-        {
-            isDragging = false;
-            SnapToNearestLevel();
-        }
 #endif
-        // END OF TESTING CODE - DELETE ABOVE #if BLOCK BEFORE MOBILE BUILD
-        // =====================================================
     }
 
     void SnapToNearestLevel()
@@ -265,23 +272,34 @@ public class CircularLevelSelector : MonoBehaviour
         }
     }
 
-    void OnLevelButtonClicked(int levelIndex)
+    void OnLevelButtonClicked(int localLevel)
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlaySwitch();
 
-        if (levelIndex < SceneManager.sceneCountInBuildSettings)
+        string sceneName = BuildSceneName(currentWorld, localLevel);
+
+        if (Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            SceneManager.LoadScene(levelIndex);
+            SceneManager.LoadScene(sceneName);
         }
         else
         {
-            Debug.LogError($"CircularLevelSelector: Scene index {levelIndex} is out of range!");
+            Debug.LogError($"CircularLevelSelector: Scene '{sceneName}' not found in Build Settings!");
         }
+    }
+
+    /// <summary>
+    /// Constructs the scene name for a given world and local level (1–10).
+    /// World 1: "Level_1" … "Level_10"
+    /// World 2+: "World {world}_Level_{level}"
+    /// </summary>
+    private string BuildSceneName(int world, int level)
+    {
+        return world == 1 ? $"Level_{level}" : $"World {world}_Level_{level}";
     }
 
     public void SelectCenterLevel()
     {
-        int centerLevel = selectedLevelIndex + 1;
-        OnLevelButtonClicked(centerLevel);
+        OnLevelButtonClicked(selectedLevelIndex + 1);
     }
 }

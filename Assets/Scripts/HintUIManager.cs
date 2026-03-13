@@ -101,7 +101,8 @@ public class HintUIManager : MonoBehaviour
 
         if (GameManager.Instance.hintsUsed < GameManager.Instance.freeHintCount)
         {
-            GameManager.Instance.hintsUsed++;
+            // Use TryUseHint so the change is persisted via PlayerPrefs.
+            GameManager.Instance.TryUseHint();
             hintUnlockedForThisLevel = true;
             UpdateHintPanelState();
         }

@@ -126,7 +126,7 @@ public class RealityManager : MonoBehaviour
     {
         if (playerTransform == null)
         {
-            PlayerCtrl player = FindFirstObjectByType<PlayerCtrl>();
+            PlayerController player = FindFirstObjectByType<PlayerController>();
             if (player != null)
             {
                 playerTransform = player.transform;

@@ -17,7 +17,7 @@ public class Hazard : MonoBehaviour
         if (!col.CompareTag("Player"))
             return;
 
-        PlayerCtrl player = col.GetComponent<PlayerCtrl>();
+        PlayerController player = col.GetComponent<PlayerController>();
         if (player != null)
         {
             player.Die();

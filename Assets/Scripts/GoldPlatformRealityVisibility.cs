@@ -43,12 +43,13 @@ public class GoldPlatformRealityVisibility : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        // Platform must be activated AND in correct reality
+        if (RealityManager.Instance == null) return;
+
         bool shouldBeVisible =
             goldPlatform.IsActivated() &&
             RealityManager.Instance.currentReality == visibleInReality;
 
         rend.enabled = shouldBeVisible;
-        col.enabled = shouldBeVisible;
+        col.enabled  = shouldBeVisible;
     }
 }

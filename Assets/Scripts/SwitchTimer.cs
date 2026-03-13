@@ -33,18 +33,19 @@ public class SwitchTimer : MonoBehaviour
     {
         while (currentTime > 0f)
         {
-            timerText.text = Mathf.Ceil(currentTime).ToString();
+            if (timerText != null)
+                timerText.text = Mathf.Ceil(currentTime).ToString();
+
             currentTime -= Time.deltaTime;
             yield return null;
         }
 
-        // Timer finished
-        timerText.text = "0";
+        if (timerText != null)
+            timerText.text = "0";
 
         if (targetPlatform != null)
             targetPlatform.Activate();
 
-        // Hide timer
         gameObject.SetActive(false);
     }
 }

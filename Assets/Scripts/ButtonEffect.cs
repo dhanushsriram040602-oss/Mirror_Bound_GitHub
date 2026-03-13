@@ -22,6 +22,10 @@ public class MenuButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public Material glowMaterial;
     private Material defaultMaterial;
 
+    // Shared auto-generated glow material — one instance for the entire session,
+    // not one per button (prevents a material leak on every button Start()).
+    private static Material sharedAutoGlowMaterial;
+
     [Header("Audio Settings")]
     public bool playHoverSound = false;
     public bool playClickSound = true;
@@ -36,23 +40,27 @@ public class MenuButtonEffect : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (backgroundFill != null) defaultMaterial = backgroundFill.material;
 
         // --- FIX INTERACTION ---
-        if (buttonText != null) buttonText.raycastTarget = false;
-        if (backgroundFill != null) backgroundFill.raycastTarget = true;
+        if (buttonText      != null) buttonText.raycastTarget      = false;
+        if (backgroundFill  != null) backgroundFill.raycastTarget  = true;
 
-        // --- AUTO-FIX GLOW ---
-        // If no material assigned, create a temporary one that supports HDR colors (Glow)
+        // --- AUTO-FIX GLOW (shared material, created only once) ---
         if (glowMaterial == null)
         {
-            Shader shader = Shader.Find("Sprites/Default");
-            if (shader != null)
+            if (sharedAutoGlowMaterial == null)
             {
-                glowMaterial = new Material(shader);
-                glowMaterial.name = "AutoGlow_Mat";
+                Shader shader = Shader.Find("Sprites/Default");
+                if (shader != null)
+                {
+                    sharedAutoGlowMaterial      = new Material(shader);
+                    sharedAutoGlowMaterial.name = "AutoGlow_Mat_Shared";
+                }
+                else
+                {
+                    Debug.LogWarning("MenuButtonEffect: 'Sprites/Default' shader not found. Assign a Glow Material manually.");
+                }
             }
-            else
-            {
-                Debug.LogWarning("Could not find 'Sprites/Default' shader. Glow might not work without a custom material.");
-            }
+
+            glowMaterial = sharedAutoGlowMaterial;
         }
 
         ResetVisuals();
