@@ -20,6 +20,8 @@ public class SplitScreenTransition : MonoBehaviour
     public RectTransform realityAPanel;
     public RectTransform realityBPanel;
     public RectTransform divider;
+    public RectTransform[] SlideEffect;
+    public RectTransform[] SlideEffectLocation;
 
     [Header("Flash Overlay")]
     [Tooltip("A full-screen white Image placed as the last child of SplitScreenBackground.")]

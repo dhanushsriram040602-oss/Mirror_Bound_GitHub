@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public int coinsCollected = 0;
+    public int coinsCollectedThisLevel = 0;
     public int hintsUsed = 0;
     
     [Header("Settings")]
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     public void AddCoin()
     {
-        coinsCollected++;
+        coinsCollectedThisLevel++;
         SaveData();
         UpdateUI();
     }
@@ -75,10 +76,28 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    public void ResetLevelData()
+    {
+        coinsCollectedThisLevel = 0;
+    }
+
+    public void AddLevelCoinsToTotal()
+    {
+        coinsCollected += coinsCollectedThisLevel;
+        SaveData();
+        UpdateUI();
+    }
+
     private void SaveData()
     {
         PlayerPrefs.SetInt(COINS_KEY, coinsCollected);
         PlayerPrefs.SetInt(HINTS_KEY, hintsUsed);
+        PlayerPrefs.Save();
+    }
+
+    private void OnDestroy()
+    {
+        PlayerPrefs.SetInt(COINS_KEY, coinsCollected + coinsCollectedThisLevel);
         PlayerPrefs.Save();
     }
 

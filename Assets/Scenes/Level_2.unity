@@ -690,6 +690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinsCollected: 0
+  coinsCollectedThisLevel: 0
   hintsUsed: 0
   hintCost: 5
   freeHintCount: 2
@@ -1174,7 +1175,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1650829696853606376, guid: 1070ba52b31f46945aa8a6a8c6a72dad, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

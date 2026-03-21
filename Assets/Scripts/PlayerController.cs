@@ -326,6 +326,8 @@ public class PlayerController : MonoBehaviour
             AssumptionHint.Instance.RegisterDeath();
         }
 
+        GameManager.Instance.ResetLevelData();
+
         // OPTIMIZATION: Use cached scene name instead of calling GetActiveScene()
         SceneManager.LoadScene(currentSceneName);
         Destroy(gameObject);

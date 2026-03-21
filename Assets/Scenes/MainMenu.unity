@@ -1843,6 +1843,8 @@ MonoBehaviour:
   realityAPanel: {fileID: 192554913}
   realityBPanel: {fileID: 545064705}
   divider: {fileID: 1201365639}
+  SlideEffect: []
+  SlideEffectLocation: []
   flashOverlay: {fileID: 1731143071}
   chargeDuration: 0.28
   surgeDuration: 0.08
@@ -1856,7 +1858,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 427693653}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: ShowInstructions
+        m_MethodName: ShowWorldSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

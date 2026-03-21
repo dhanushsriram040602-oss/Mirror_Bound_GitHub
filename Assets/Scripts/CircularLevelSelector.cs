@@ -179,6 +179,9 @@ public class CircularLevelSelector : MonoBehaviour
             }
             else if (Mouse.current.leftButton.isPressed && isDragging)
             {
+                if(selectedLevelIndex == 0 && mousePos.x > touchStartPos.x) return; // Prevent dragging right from the first level
+                if(selectedLevelIndex == totalLevels-1 && mousePos.x < touchStartPos.x) return; // Prevent dragging right from the first level
+
                 float dragDistance = mousePos.x - touchStartPos.x;
                 targetOffset   = dragStartOffset + dragDistance;
                 offsetVelocity = 0f;
@@ -215,6 +218,8 @@ public class CircularLevelSelector : MonoBehaviour
 
     public void ScrollLeft()
     {
+        if (selectedLevelIndex == 0)
+            return; // Prevent scrolling left from the first level
         selectedLevelIndex--;
         if (selectedLevelIndex < 0) selectedLevelIndex = totalLevels - 1;
 
@@ -225,6 +230,9 @@ public class CircularLevelSelector : MonoBehaviour
 
     public void ScrollRight()
     {
+        if (selectedLevelIndex == totalLevels - 1)
+            return; // Prevent scrolling left from the first level
+
         selectedLevelIndex++;
         if (selectedLevelIndex >= totalLevels) selectedLevelIndex = 0;
 
