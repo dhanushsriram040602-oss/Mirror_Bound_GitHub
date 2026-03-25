@@ -8,12 +8,16 @@ using UnityEngine.UI;
 public class OpeningCutsceneController : MonoBehaviour
 {
     [Header("Core")]
+    public bool displayLoadingScene;
+    public bool displayCutscene;
     public RectTransform uiRoot;
     public Camera worldCamera;
 
     [Header("Split Reality Backgrounds")]
     public PolygonGraphic realityA;
+    public GameObject realityAobj;
     public PolygonGraphic realityB;
+    public GameObject realityBobj;
     public Texture2D realityATexture;
     public Texture2D realityBTexture;
 
@@ -21,6 +25,7 @@ public class OpeningCutsceneController : MonoBehaviour
     public RawImage flashOverlay;
     public RawImage vignetteOverlay;
     public RawImage riftLine;
+    public GameObject riftLineobj;
 
     [Header("Player Visuals")]
     public Image cube;
@@ -31,6 +36,7 @@ public class OpeningCutsceneController : MonoBehaviour
 
     [Header("Dialogue")]
     public TMP_Text dialogueText;
+    public GameObject dialogueTextobj;
     public CanvasGroup dialogueGroup;
 
     [Header("Scene Transition")]
@@ -109,6 +115,8 @@ public class OpeningCutsceneController : MonoBehaviour
             worldCamera = Camera.main;
     }
 
+    private const string FirstRunKey = "HasSeenLoadingScene";
+
     private void Start()
     {
         if (!ValidateReferences())
@@ -117,26 +125,48 @@ public class OpeningCutsceneController : MonoBehaviour
             return;
         }
 
-        CreateRuntimeTextures();
-        CreateRuntimeSprites();
-        CreateLineMaterial();
-        ApplyRuntimeAssets();
-        CreateTransitionOverlay();
-
-        CacheBasePositions();
-        BuildSpeedLines();
-        BuildGlitchWaves();
-
-        SetPhase(1);
-        initialized = true;
-
-        StartCoroutine(RunOpeningSequence());
+        // Only show the loading scene on the very first launch.
+        // On every subsequent launch skip straight to the cutscene.
+        if (displayLoadingScene && PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
+        {
+            displayLoadingScene = false;
+            displayCutscene = true;
+        }
     }
 
     private void Update()
     {
-        if (!initialized || !Application.isPlaying || uiRoot == null)
+        if (displayLoadingScene)
+        { 
+            if (initialized == false)
+            {
+                InitializeLoadingScene();
+                initialized = true;
+            }
+
+        }
+
+        if (!Application.isPlaying || !displayCutscene || displayLoadingScene)
             return;
+
+        if (!initialized || !uiRoot)
+        {
+            CreateRuntimeTextures();
+            CreateRuntimeSprites();
+            CreateLineMaterial();
+            ApplyRuntimeAssets();
+            CreateTransitionOverlay();
+
+            CacheBasePositions();
+            BuildSpeedLines();
+            BuildGlitchWaves();
+
+            SetPhase(1);
+            initialized = true;
+
+            StartCoroutine(RunOpeningSequence());
+        }
+
 
         Vector2 motion = GetGlobalMotionOffset();
         float rotation = GetGlobalMotionRotation();
@@ -151,6 +181,46 @@ public class OpeningCutsceneController : MonoBehaviour
         UpdateGlitchWaves(motion);
         UpdateCinematicCamera();
     }
+
+    private void InitializeLoadingScene()
+    {
+        // Hide all cutscene-specific UI — the LoadingSceneController owns the screen right now.
+        if (dialogueTextobj != null) dialogueTextobj.SetActive(false);
+        if (realityAobj != null) realityAobj.SetActive(false);
+        if (realityBobj != null) realityBobj.SetActive(false);
+        if (riftLineobj != null) riftLineobj.SetActive(false);
+
+        // Hide player visual so LoadingSceneController renders its own copy.
+        if (cube != null) cube.gameObject.SetActive(false);
+        if (cubeShadowRed != null) cubeShadowRed.gameObject.SetActive(false);
+        if (cubeShadowCyan != null) cubeShadowCyan.gameObject.SetActive(false);
+
+        // Hide overlays.
+        if (flashOverlay != null) flashOverlay.gameObject.SetActive(false);
+        if (vignetteOverlay != null) vignetteOverlay.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// Called by LoadingSceneController when the player taps the eye and the loading fade is done.
+    /// Re-enables cutscene visuals and kicks off the opening sequence.
+    /// </summary>
+    public void BeginCutsceneFromLoading()
+    {
+        // Mark the loading scene as seen so it never shows again.
+        PlayerPrefs.SetInt(FirstRunKey, 1);
+        PlayerPrefs.Save();
+
+        displayLoadingScene = false;
+        displayCutscene = true;
+
+        // Re-show elements hidden during loading.
+        if (cube != null) cube.gameObject.SetActive(true);
+        if (flashOverlay != null) flashOverlay.gameObject.SetActive(true);
+        if (vignetteOverlay != null) vignetteOverlay.gameObject.SetActive(true);
+
+        initialized = false; // Allow Update to re-initialise the cutscene path.
+    }
+
 
     private void OnDestroy()
     {
@@ -186,6 +256,11 @@ public class OpeningCutsceneController : MonoBehaviour
 
     private void CreateRuntimeTextures()
     {
+        realityAobj.SetActive(true);
+        realityBobj.SetActive(true);
+        riftLineobj.SetActive(true);
+        dialogueTextobj.SetActive(true);
+
         whiteTex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
         whiteTex.SetPixel(0, 0, Color.white);
         whiteTex.Apply();

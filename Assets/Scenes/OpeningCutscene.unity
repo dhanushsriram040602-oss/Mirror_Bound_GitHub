@@ -194,6 +194,96 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 72621635}
   m_CullTransparentMesh: 1
+--- !u!1 &184084230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 184084233}
+  - component: {fileID: 184084232}
+  - component: {fileID: 184084231}
+  m_Layer: 0
+  m_Name: loading scene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &184084231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184084230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff8c721e813cfb4492bdeea2dfe9093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LoadingSceneController
+  playerSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  cutsceneController: {fileID: 468430647}
+  playerSize: {x: 220, y: 220}
+  playerAnchoredPosition: {x: 0, y: 0}
+  eyeDiameter: 38
+  eyeOffset: {x: 40, y: 25}
+  eyeHitboxScale: 1.8
+  openDuration: 3
+  closeTime: 0.12
+  openTime: 0.18
+  hintText: Touch the eye to continue
+  hintFontSize: 28
+  hintColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
+  hintPosition: {x: 0, y: -160}
+  glitchIntensity: 0.55
+  glitchInterval: 2.2
+  glitchDuration: 0.22
+  fadeOutDuration: 0.7
+--- !u!223 &184084232
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184084230}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!224 &184084233
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184084230}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 341.4345, y: 228.22261}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &468430646
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +296,7 @@ GameObject:
   - component: {fileID: 468430647}
   - component: {fileID: 468430651}
   - component: {fileID: 468430650}
-  - component: {fileID: 468430649}
+  - component: {fileID: 468430652}
   m_Layer: 0
   m_Name: CutsceneManager
   m_TagString: Untagged
@@ -226,21 +316,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3764b973a41dd9448fd79380f36b11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpeningCutsceneController
+  displayLoadingScene: 1
+  displayCutscene: 1
   uiRoot: {fileID: 1515166406}
   worldCamera: {fileID: 886093415}
   realityA: {fileID: 1391983272}
+  realityAobj: {fileID: 1391983271}
   realityB: {fileID: 1373772433}
+  realityBobj: {fileID: 1373772432}
   realityATexture: {fileID: 2800000, guid: 99207c75d8d4be546b3adcfb4d420347, type: 3}
   realityBTexture: {fileID: 2800000, guid: 8ea54eb467de0bf438361ba4db8bfb7f, type: 3}
   flashOverlay: {fileID: 2066611860}
   vignetteOverlay: {fileID: 862419703}
   riftLine: {fileID: 617830257}
+  riftLineobj: {fileID: 617830256}
   cube: {fileID: 473666251}
   cubeShadowRed: {fileID: 2058011948}
   cubeShadowCyan: {fileID: 72621637}
   playerSprite: {fileID: -7343394875876703637, guid: 832e05e8965af55469c8b0e1f996d589, type: 3}
   shadowSprite: {fileID: -7343394875876703637, guid: 832e05e8965af55469c8b0e1f996d589, type: 3}
   dialogueText: {fileID: 1212891062}
+  dialogueTextobj: {fileID: 1212891058}
   dialogueGroup: {fileID: 1212891059}
   mainMenuSceneName: MainMenu
   loadMainMenuSceneAtEnd: 1
@@ -252,14 +348,13 @@ MonoBehaviour:
   gameplayRoot: {fileID: 0}
   speedLineCount: 120
   glitchWaveCount: 12
---- !u!4 &468430648
-Transform:
+--- !u!224 &468430648
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 468430646}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -267,40 +362,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &468430649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 468430646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 015cc8759aafc2d46b62fc6854d24847, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CutsceneAudioDirector
-  masterVolume: 0.82
-  phase1DroneVolume: 0.28
-  phase1DronePitch: 55
-  phase2TensionVolume: 0.55
-  phase2GlitchRate: 0.18
-  hyperJumpVolume: 0.85
-  phase4AmbientVolume: 0.38
-  phase4DronePitch: 40
-  exitFadeOutDuration: 1
-  primarySource: {fileID: 0}
-  sfxSource: {fileID: 0}
-  synthesisBuffer: []
-  sampleRate: 0
-  currentMode: 0
-  modeVolume: 0
-  dronePhase: 0
-  tensionPhase: 0
-  glitchTimer: 0
-  glitchActive: 0
-  glitchSeed: 0
-  audioTime: 0
-  _lcgState: 1234567891
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &468430650
 AudioSource:
   m_ObjectHideFlags: 0
@@ -495,6 +561,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!223 &468430652
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 468430646}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &473666249
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,6 +814,7 @@ GameObject:
   - component: {fileID: 886093416}
   - component: {fileID: 886093415}
   - component: {fileID: 886093414}
+  - component: {fileID: 886093417}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -806,6 +896,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &886093417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886093413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1212891058
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,3 +1613,4 @@ SceneRoots:
   - {fileID: 1932943151}
   - {fileID: 1249089988}
   - {fileID: 468430648}
+  - {fileID: 184084233}
