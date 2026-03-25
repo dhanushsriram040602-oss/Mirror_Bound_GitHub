@@ -45,7 +45,8 @@ public class LoadingSceneController : MonoBehaviour
     public string hintText = "Touch the eye to continue";
     public float hintFontSize = 28f;
     public Color hintColor = new Color(0.85f, 0.85f, 0.85f, 1f);
-    public Vector2 hintPosition = new Vector2(0f, -160f);
+    [Tooltip("Distance in pixels from the bottom edge of the screen.")]
+    public float hintBottomPadding = 60f;
 
     [Header("Glitch (Spider-Verse)")]
     [Range(0f, 1f)] public float glitchIntensity = 0.55f;
@@ -88,15 +89,27 @@ public class LoadingSceneController : MonoBehaviour
 
     private void Awake()
     {
+        // In the Editor always show the loading screen so it can be tested freely.
+        // In a build it only shows on the very first launch (PlayerPrefs flag not yet set).
+#if UNITY_EDITOR
+        bool shouldShow = true;
+#else
+        bool shouldShow = PlayerPrefs.GetInt("HasSeenLoadingScene", 0) == 0;
+#endif
+
+        if (!shouldShow)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         canvas = GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 99;
 
-        // Ensure GraphicRaycaster for touch/click detection
         if (GetComponent<UnityEngine.UI.GraphicRaycaster>() == null)
             gameObject.AddComponent<UnityEngine.UI.GraphicRaycaster>();
 
-        // Ensure EventSystem exists
         if (FindFirstObjectByType<EventSystem>() == null)
         {
             GameObject es = new GameObject("EventSystem");
@@ -112,8 +125,19 @@ public class LoadingSceneController : MonoBehaviour
         rootGroup.blocksRaycasts = true;
     }
 
+    /// <summary>Clears the first-launch flag so the loading screen shows again on next build launch.</summary>
+    [ContextMenu("Reset First Launch Flag")]
+    private void ResetFirstLaunchFlag()
+    {
+        PlayerPrefs.DeleteKey("HasSeenLoadingScene");
+        PlayerPrefs.Save();
+        UnityEngine.Debug.Log("LoadingSceneController: HasSeenLoadingScene flag cleared.");
+    }
+
     private void Start()
     {
+        // Awake already deactivated us on non-first launches, so if we reach Start
+        // the loading screen is definitely needed.
         BuildUI();
         StartBlinkLoop();
         glitchRoutine = StartCoroutine(GlitchBurstLoop());
@@ -174,7 +198,7 @@ public class LoadingSceneController : MonoBehaviour
         eyeImage = eyeGO.AddComponent<Image>();
 
         // Procedural filled-circle sprite for the pupil
-        eyeImage.sprite = CreateCircleSprite(16, Color.black);
+        eyeImage.sprite = CreateCircleSprite(64, Color.black);
         eyeImage.color = Color.black;
         eyeImage.preserveAspect = false;
         eyeImage.raycastTarget = false;     // visual only – hitbox is separate
@@ -201,7 +225,7 @@ public class LoadingSceneController : MonoBehaviour
         entry.callback.AddListener(_ => OnEyeTouched());
         trigger.triggers.Add(entry);
 
-        // ── Hint text
+        // ── Hint text — anchored to the bottom of the screen
         GameObject textGO = new GameObject("HintText");
         textGO.transform.SetParent(transform, false);
         hintLabel = textGO.AddComponent<TextMeshProUGUI>();
@@ -211,11 +235,12 @@ public class LoadingSceneController : MonoBehaviour
         hintLabel.alignment = TextAlignmentOptions.Center;
         hintLabel.raycastTarget = false;
         RectTransform textRT = hintLabel.rectTransform;
-        textRT.anchorMin = new Vector2(0.5f, 0.5f);
-        textRT.anchorMax = new Vector2(0.5f, 0.5f);
-        textRT.pivot = new Vector2(0.5f, 0.5f);
-        textRT.sizeDelta = new Vector2(700f, 60f);
-        textRT.anchoredPosition = hintPosition;
+        // Anchor to bottom-centre, sit hintBottomPadding pixels above the bottom edge
+        textRT.anchorMin = new Vector2(0f, 0f);
+        textRT.anchorMax = new Vector2(1f, 0f);
+        textRT.pivot = new Vector2(0.5f, 0f);
+        textRT.sizeDelta = new Vector2(0f, 60f);
+        textRT.anchoredPosition = new Vector2(0f, hintBottomPadding);
     }
 
     // ─────────────────────────── Helpers ──────────────────────────────

@@ -96,6 +96,7 @@ public class OpeningCutsceneController : MonoBehaviour
     private int phase = 0;
     private Coroutine dialogueRoutine;
     private bool initialized = false;
+    private bool cutsceneArmed = false; // Only set true by BeginCutsceneFromLoading or the subsequent-launch skip path
 
     private const float PHASE1_DIALOGUE_TIME = 3f;
     private const float PHASE2_DIALOGUE_TIME = 2.8f;
@@ -113,6 +114,17 @@ public class OpeningCutsceneController : MonoBehaviour
     {
         if (worldCamera == null)
             worldCamera = Camera.main;
+
+        // In the Editor always show the loading screen — never auto-arm the cutscene.
+        // In a build, skip loading on subsequent launches (PlayerPrefs key already set).
+#if !UNITY_EDITOR
+        if (displayLoadingScene && PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
+        {
+            displayLoadingScene = false;
+            displayCutscene = true;
+            cutsceneArmed = true;
+        }
+#endif
     }
 
     private const string FirstRunKey = "HasSeenLoadingScene";
@@ -124,29 +136,21 @@ public class OpeningCutsceneController : MonoBehaviour
             enabled = false;
             return;
         }
-
-        // Only show the loading scene on the very first launch.
-        // On every subsequent launch skip straight to the cutscene.
-        if (displayLoadingScene && PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
-        {
-            displayLoadingScene = false;
-            displayCutscene = true;
-        }
     }
 
     private void Update()
     {
         if (displayLoadingScene)
-        { 
-            if (initialized == false)
+        {
+            if (!initialized)
             {
                 InitializeLoadingScene();
                 initialized = true;
             }
-
+            return; // Never fall through to the cutscene block while loading screen is up
         }
 
-        if (!Application.isPlaying || !displayCutscene || displayLoadingScene)
+        if (!Application.isPlaying || !displayCutscene || !cutsceneArmed)
             return;
 
         if (!initialized || !uiRoot)
@@ -212,6 +216,7 @@ public class OpeningCutsceneController : MonoBehaviour
 
         displayLoadingScene = false;
         displayCutscene = true;
+        cutsceneArmed = true; // Eye was tapped — explicitly cleared to start
 
         // Re-show elements hidden during loading.
         if (cube != null) cube.gameObject.SetActive(true);

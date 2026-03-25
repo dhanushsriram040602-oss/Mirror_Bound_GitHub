@@ -224,12 +224,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff8c721e813cfb4492bdeea2dfe9093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingSceneController
-  playerSprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  playerSprite: {fileID: -7343394875876703637, guid: 0d1462273205a904b8f5eaff81e4ada3, type: 3}
   cutsceneController: {fileID: 468430647}
-  playerSize: {x: 220, y: 220}
+  playerSize: {x: 440, y: 440}
   playerAnchoredPosition: {x: 0, y: 0}
-  eyeDiameter: 38
-  eyeOffset: {x: 40, y: 25}
+  eyeDiameter: 60
+  eyeOffset: {x: 80, y: 50}
   eyeHitboxScale: 1.8
   openDuration: 3
   closeTime: 0.12
@@ -237,11 +237,11 @@ MonoBehaviour:
   hintText: Touch the eye to continue
   hintFontSize: 28
   hintColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
-  hintPosition: {x: 0, y: -160}
+  hintBottomPadding: 0
   glitchIntensity: 0.55
   glitchInterval: 2.2
   glitchDuration: 0.22
-  fadeOutDuration: 0.7
+  zoomIntoDuration: 0.9
 --- !u!223 &184084232
 Canvas:
   m_ObjectHideFlags: 0
