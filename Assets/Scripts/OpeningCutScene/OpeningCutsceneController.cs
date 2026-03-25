@@ -96,6 +96,7 @@ public class OpeningCutsceneController : MonoBehaviour
     private int phase = 0;
     private Coroutine dialogueRoutine;
     private bool initialized = false;
+    private bool cutsceneArmed = false; // Only set true by BeginCutsceneFromLoading or the subsequent-launch skip path
 
     private const float PHASE1_DIALOGUE_TIME = 3f;
     private const float PHASE2_DIALOGUE_TIME = 2.8f;
@@ -113,9 +114,22 @@ public class OpeningCutsceneController : MonoBehaviour
     {
         if (worldCamera == null)
             worldCamera = Camera.main;
+
+#if !UNITY_EDITOR
+        // In a build: if the full intro has already been seen, skip straight to MainMenu.
+        if (PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
+        {
+            if (!string.IsNullOrWhiteSpace(mainMenuSceneName))
+                SceneManager.LoadScene(mainMenuSceneName);
+            return;
+        }
+#endif
+        // First launch (or Editor) — loading screen shows, then cutscene plays normally.
     }
 
-    private const string FirstRunKey = "HasSeenLoadingScene";
+    // Written to PlayerPrefs only after the full cutscene completes.
+    // On subsequent launches Awake reads this and jumps straight to MainMenu.
+    private const string FirstRunKey = "HasSeenIntro";
 
     private void Start()
     {
@@ -124,29 +138,21 @@ public class OpeningCutsceneController : MonoBehaviour
             enabled = false;
             return;
         }
-
-        // Only show the loading scene on the very first launch.
-        // On every subsequent launch skip straight to the cutscene.
-        if (displayLoadingScene && PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
-        {
-            displayLoadingScene = false;
-            displayCutscene = true;
-        }
     }
 
     private void Update()
     {
         if (displayLoadingScene)
-        { 
-            if (initialized == false)
+        {
+            if (!initialized)
             {
                 InitializeLoadingScene();
                 initialized = true;
             }
-
+            return; // Never fall through to the cutscene block while loading screen is up
         }
 
-        if (!Application.isPlaying || !displayCutscene || displayLoadingScene)
+        if (!Application.isPlaying || !displayCutscene || !cutsceneArmed)
             return;
 
         if (!initialized || !uiRoot)
@@ -206,19 +212,15 @@ public class OpeningCutsceneController : MonoBehaviour
     /// </summary>
     public void BeginCutsceneFromLoading()
     {
-        // Mark the loading scene as seen so it never shows again.
-        PlayerPrefs.SetInt(FirstRunKey, 1);
-        PlayerPrefs.Save();
-
         displayLoadingScene = false;
         displayCutscene = true;
+        cutsceneArmed = true;
 
-        // Re-show elements hidden during loading.
         if (cube != null) cube.gameObject.SetActive(true);
         if (flashOverlay != null) flashOverlay.gameObject.SetActive(true);
         if (vignetteOverlay != null) vignetteOverlay.gameObject.SetActive(true);
 
-        initialized = false; // Allow Update to re-initialise the cutscene path.
+        initialized = false;
     }
 
 
@@ -561,6 +563,10 @@ public class OpeningCutsceneController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(finalHoldBeforeLoad);
+
+        // Mark the full intro as seen — subsequent launches skip straight to MainMenu.
+        PlayerPrefs.SetInt(FirstRunKey, 1);
+        PlayerPrefs.Save();
 
         if (loadMainMenuSceneAtEnd && !string.IsNullOrWhiteSpace(mainMenuSceneName))
         {
