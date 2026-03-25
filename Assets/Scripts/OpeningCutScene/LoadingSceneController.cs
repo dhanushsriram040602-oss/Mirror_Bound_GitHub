@@ -55,7 +55,8 @@ public class LoadingSceneController : MonoBehaviour
     public float glitchDuration = 0.22f;
 
     [Header("Transition")]
-    public float fadeOutDuration = 0.7f;
+    [Tooltip("Seconds the eye takes to zoom in and cover the screen.")]
+    public float zoomIntoDuration = 0.9f;
 
     // ─────────────────────────── Runtime ──────────────────────────────
     private Canvas canvas;
@@ -470,37 +471,65 @@ public class LoadingSceneController : MonoBehaviour
 
     private IEnumerator EyeTapSequence()
     {
-        // One final intense glitch burst on tap
+        // ── 1. Freeze blink — eye must stay open for the zoom
+        eyeImage.rectTransform.localScale = Vector3.one;
+
+        // ── 2. Brief intense glitch burst on tap
         isGlitching = true;
         if (scanlineOverlay != null) scanlineOverlay.enabled = true;
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.22f);
         isGlitching = false;
         if (scanlineOverlay != null) scanlineOverlay.enabled = false;
         if (glitchRed != null) glitchRed.enabled = false;
         if (glitchCyan != null) glitchCyan.enabled = false;
 
-        // Fade the entire loading canvas to black
-        yield return StartCoroutine(FadeGroup(rootGroup, 1f, 0f, fadeOutDuration));
+        // Snap player back to rest position after any glitch jitter
+        if (playerImage != null)
+            playerImage.rectTransform.anchoredPosition = playerAnchoredPosition;
 
-        // Hand off to cutscene
+        // Hide secondary UI so only the player + eye remain during zoom
+        if (hintLabel != null) hintLabel.gameObject.SetActive(false);
+        if (halftoneOverlay != null) halftoneOverlay.enabled = false;
+
+        // Move eye on top of all siblings so nothing renders over it during zoom
+        eyeImage.transform.SetAsLastSibling();
+
+        // ── 3. Zoom — scale the eye outward until it covers the full screen
+        //    The eye is a black circle; as it grows it naturally blacks out everything.
+        float screenDiag = Mathf.Sqrt(Screen.width * Screen.width + Screen.height * Screen.height);
+        float targetEyeScale = (screenDiag / eyeDiameter) * 1.5f;   // 1.5× safety margin for off-centre positions
+
+        float elapsed = 0f;
+        Vector3 playerStartScale = playerImage != null ? playerImage.rectTransform.localScale : Vector3.one;
+
+        while (elapsed < zoomIntoDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / zoomIntoDuration);
+
+            // Cubic ease-in: slow start, accelerates hard → cinematic punch
+            float eased = t * t * t;
+
+            // Eye grows from pupil size to cover the screen
+            float eyeScale = Mathf.Lerp(1f, targetEyeScale, eased);
+            eyeImage.rectTransform.localScale = new Vector3(eyeScale, eyeScale, 1f);
+
+            // Player uses the exact same scale — they zoom together as one unit
+            if (playerImage != null)
+                playerImage.rectTransform.localScale = new Vector3(eyeScale, eyeScale, 1f);
+
+            yield return null;
+        }
+
+        // ── 4. Screen is fully black (eye covers everything).
+        //    Signal the cutscene. Its transitionGroup starts at alpha=1 (black) and fades in,
+        //    so the handoff is seamless with no visible gap.
         if (cutsceneController != null)
             cutsceneController.BeginCutsceneFromLoading();
 
-        gameObject.SetActive(false);
-    }
+        // Wait one frame so the cutscene's black overlay is in place before we disappear
+        yield return null;
 
-    private IEnumerator FadeGroup(CanvasGroup group, float from, float to, float duration)
-    {
-        if (group == null) yield break;
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float n = Mathf.Clamp01(elapsed / duration);
-            n = n * n * (3f - 2f * n);   // smoothstep
-            group.alpha = Mathf.Lerp(from, to, n);
-            yield return null;
-        }
-        group.alpha = to;
+        gameObject.SetActive(false);
     }
 }
