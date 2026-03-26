@@ -127,7 +127,9 @@ public class OpeningCutsceneController : MonoBehaviour
 #endif
     }
 
-    private const string FirstRunKey = "HasSeenLoadingScene";
+    // Written to PlayerPrefs only after the full cutscene completes.
+    // On subsequent launches Awake reads this and jumps straight to MainMenu.
+    private const string FirstRunKey = "HasSeenIntro";
 
     private void Start()
     {
@@ -210,20 +212,15 @@ public class OpeningCutsceneController : MonoBehaviour
     /// </summary>
     public void BeginCutsceneFromLoading()
     {
-        // Mark the loading scene as seen so it never shows again.
-        PlayerPrefs.SetInt(FirstRunKey, 1);
-        PlayerPrefs.Save();
-
         displayLoadingScene = false;
         displayCutscene = true;
         cutsceneArmed = true; // Eye was tapped — explicitly cleared to start
 
-        // Re-show elements hidden during loading.
         if (cube != null) cube.gameObject.SetActive(true);
         if (flashOverlay != null) flashOverlay.gameObject.SetActive(true);
         if (vignetteOverlay != null) vignetteOverlay.gameObject.SetActive(true);
 
-        initialized = false; // Allow Update to re-initialise the cutscene path.
+        initialized = false;
     }
 
 
@@ -566,6 +563,10 @@ public class OpeningCutsceneController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(finalHoldBeforeLoad);
+
+        // Mark the full intro as seen — subsequent launches skip straight to MainMenu.
+        PlayerPrefs.SetInt(FirstRunKey, 1);
+        PlayerPrefs.Save();
 
         if (loadMainMenuSceneAtEnd && !string.IsNullOrWhiteSpace(mainMenuSceneName))
         {

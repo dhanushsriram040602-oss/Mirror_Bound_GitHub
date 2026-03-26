@@ -94,7 +94,11 @@ public class LoadingSceneController : MonoBehaviour
 #if UNITY_EDITOR
         bool shouldShow = true;
 #else
+<<<<<<< HEAD
         bool shouldShow = PlayerPrefs.GetInt("HasSeenLoadingScene", 0) == 0;
+=======
+        bool shouldShow = PlayerPrefs.GetInt("HasSeenIntro", 0) == 0;
+>>>>>>> da34dc245aa59cd22799154bc8c5a9ae3661db5d
 #endif
 
         if (!shouldShow)
