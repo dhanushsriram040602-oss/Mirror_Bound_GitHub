@@ -235,12 +235,12 @@ MonoBehaviour:
   closeTime: 0.12
   openTime: 0.18
   hintText: Touch the eye to continue
-  hintFontSize: 28
+  hintFontSize: 50
   hintColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
-  hintBottomPadding: 0
-  glitchIntensity: 0.55
-  glitchInterval: 2.2
-  glitchDuration: 0.22
+  hintBottomPadding: 200
+  glitchIntensity: 1
+  glitchInterval: 2.71
+  glitchDuration: 0.77
   zoomIntoDuration: 0.9
 --- !u!223 &184084232
 Canvas:

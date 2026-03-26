@@ -89,23 +89,7 @@ public class LoadingSceneController : MonoBehaviour
 
     private void Awake()
     {
-        // In the Editor always show the loading screen so it can be tested freely.
-        // In a build it only shows on the very first launch (PlayerPrefs flag not yet set).
-#if UNITY_EDITOR
-        bool shouldShow = true;
-#else
-<<<<<<< HEAD
-        bool shouldShow = PlayerPrefs.GetInt("HasSeenLoadingScene", 0) == 0;
-=======
-        bool shouldShow = PlayerPrefs.GetInt("HasSeenIntro", 0) == 0;
->>>>>>> da34dc245aa59cd22799154bc8c5a9ae3661db5d
-#endif
-
-        if (!shouldShow)
-        {
-            gameObject.SetActive(false);
-            return;
-        }
+        // Loading screen always shows on every launch.
 
         canvas = GetComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -127,15 +111,6 @@ public class LoadingSceneController : MonoBehaviour
 
         rootGroup.alpha = 1f;
         rootGroup.blocksRaycasts = true;
-    }
-
-    /// <summary>Clears the first-launch flag so the loading screen shows again on next build launch.</summary>
-    [ContextMenu("Reset First Launch Flag")]
-    private void ResetFirstLaunchFlag()
-    {
-        PlayerPrefs.DeleteKey("HasSeenLoadingScene");
-        PlayerPrefs.Save();
-        UnityEngine.Debug.Log("LoadingSceneController: HasSeenLoadingScene flag cleared.");
     }
 
     private void Start()

@@ -441,6 +441,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinsCollected: 0
+  coinsCollectedThisLevel: 0
   hintsUsed: 0
   hintCost: 5
   freeHintCount: 2
@@ -800,6 +801,10 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 5587031916003740975}
+    - target: {fileID: 3062271776175301996, guid: d12e55366a61e93478442c1d483403fa, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 61.399994
+      objectReference: {fileID: 0}
     - target: {fileID: 3502330365071888138, guid: d12e55366a61e93478442c1d483403fa, type: 3}
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

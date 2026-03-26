@@ -115,14 +115,14 @@ public class OpeningCutsceneController : MonoBehaviour
         if (worldCamera == null)
             worldCamera = Camera.main;
 
-        // In the Editor always show the loading screen — never auto-arm the cutscene.
-        // In a build, skip loading on subsequent launches (PlayerPrefs key already set).
+        // Loading screen always runs. Cutscene is armed only on first launch.
+        // On subsequent launches the loading screen shows, but eye-tap goes to MainMenu.
 #if !UNITY_EDITOR
         if (displayLoadingScene && PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
         {
-            displayLoadingScene = false;
-            displayCutscene = true;
-            cutsceneArmed = true;
+            // Keep displayLoadingScene = true — loading screen still shows.
+            // cutsceneArmed stays false — BeginCutsceneFromLoading will skip to MainMenu.
+            displayCutscene = false;
         }
 #endif
     }
@@ -208,13 +208,23 @@ public class OpeningCutsceneController : MonoBehaviour
 
     /// <summary>
     /// Called by LoadingSceneController when the player taps the eye and the loading fade is done.
-    /// Re-enables cutscene visuals and kicks off the opening sequence.
+    /// On first launch: enables cutscene visuals and kicks off the opening sequence.
+    /// On subsequent launches: skips straight to MainMenu.
     /// </summary>
     public void BeginCutsceneFromLoading()
     {
+        // Cutscene already seen — skip straight to MainMenu.
+        if (PlayerPrefs.GetInt(FirstRunKey, 0) == 1)
+        {
+            if (!string.IsNullOrWhiteSpace(mainMenuSceneName))
+                SceneManager.LoadScene(mainMenuSceneName);
+            return;
+        }
+
+        // First launch — play the full cutscene.
         displayLoadingScene = false;
         displayCutscene = true;
-        cutsceneArmed = true; // Eye was tapped — explicitly cleared to start
+        cutsceneArmed = true;
 
         if (cube != null) cube.gameObject.SetActive(true);
         if (flashOverlay != null) flashOverlay.gameObject.SetActive(true);
