@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -136,11 +137,12 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // 2. INPUT — PC reads Unity's Input system; mobile reads MobileInput static hub.
+        // 2. INPUT — PC reads the new Input System; mobile reads MobileInput static hub.
 #if UNITY_ANDROID || UNITY_IOS
         inputX = MobileInput.horizontal;
 #else
-        inputX = Input.GetAxisRaw("Horizontal");
+        InputAction moveAction = InputSystem.actions.FindAction("Player/Move");
+        inputX = moveAction != null ? moveAction.ReadValue<Vector2>().x : 0f;
 #endif
 
         // 3. GROUND CHECK — non-alloc, no deprecated API (Unity 6)
@@ -160,7 +162,8 @@ public class PlayerController : MonoBehaviour
         if (MobileInput.jumpPressed) jumpBufferCounter = jumpBufferTime;
         else jumpBufferCounter -= Time.deltaTime;
 #else
-        if (Input.GetButtonDown("Jump")) jumpBufferCounter = jumpBufferTime;
+        InputAction jumpAction = InputSystem.actions.FindAction("Player/Jump");
+        if (jumpAction != null && jumpAction.WasPressedThisFrame()) jumpBufferCounter = jumpBufferTime;
         else jumpBufferCounter -= Time.deltaTime;
 #endif
 
@@ -221,7 +224,8 @@ public class PlayerController : MonoBehaviour
 #if UNITY_ANDROID || UNITY_IOS
         else if (rb.linearVelocity.y > 0 && !MobileInput.jumpHeld)
 #else
-        else if (rb.linearVelocity.y > 0 && !Input.GetButton("Jump"))
+        InputAction jumpActionFixed = InputSystem.actions.FindAction("Player/Jump");
+        else if (rb.linearVelocity.y > 0 && (jumpActionFixed == null || !jumpActionFixed.IsPressed()))
 #endif
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y *
@@ -326,7 +330,7 @@ public class PlayerController : MonoBehaviour
             AssumptionHint.Instance.RegisterDeath();
         }
 
-        GameManager.Instance.ResetLevelData();
+        GameManager.Instance.ResetLevelCoins();
 
         // OPTIMIZATION: Use cached scene name instead of calling GetActiveScene()
         SceneManager.LoadScene(currentSceneName);
@@ -357,7 +361,19 @@ public class PlayerController : MonoBehaviour
     public void MobileJumpUp() { MobileInput.jumpHeld = false; }
 
     /// <summary>Called by the Shift/Reality button PointerDown EventTrigger.</summary>
-    public void MobileToggleReality() { MobileInput.shiftPressed = true; }
+    public void MobileToggleReality()
+    {
+        if (MobileInput.horizontal != 0f)
+        {
+            // A move button's PointerUp was incorrectly wired to this method.
+            // Stop movement and ignore the shift entirely.
+            MobileInput.horizontal = 0f;
+        }
+        else
+        {
+            MobileInput.shiftPressed = true;
+        }
+    }
 
     // ================= GIZMOS =================
 

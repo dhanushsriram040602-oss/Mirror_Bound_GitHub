@@ -1452,7 +1452,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinsCollected: 0
   coinsCollectedThisLevel: 0
-  hintsUsed: 0
   hintCost: 5
   freeHintCount: 2
 --- !u!114 &733013155
@@ -1487,6 +1486,14 @@ MonoBehaviour:
   - poolName: CoinCollect
     particlePrefab: {fileID: 8657369963450296493, guid: f5fd0c14fe1040d4d85798a82932e13b, type: 3}
     initialSize: 5
+    expandable: 1
+  - poolName: EchoSpawn
+    particlePrefab: {fileID: 4646982383594119849, guid: a6b71946f81e5e343abbae4753efd97d, type: 3}
+    initialSize: 5
+    expandable: 1
+  - poolName: GravityZone
+    particlePrefab: {fileID: 2347573663697254191, guid: 3cf30a707989f89459ca7e277a316bce, type: 3}
+    initialSize: 4
     expandable: 1
   autoReturnParticles: 0
 --- !u!4 &740301646 stripped

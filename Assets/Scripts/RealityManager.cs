@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class RealityManager : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class RealityManager : MonoBehaviour
 
     private float lastToggleTime;
 
+    // Input action resolved once from the global InputActionAsset.
+    private InputAction shiftAction;
+
     void Awake()
     {
         if (Instance == null)
@@ -41,11 +45,25 @@ public class RealityManager : MonoBehaviour
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        // Resolve the Sprint action from the global registered asset.
+        // Bindings: LeftShift and Q are added below if not already present.
+        shiftAction = InputSystem.actions.FindAction("Player/Sprint");
+        if (shiftAction != null)
+        {
+            shiftAction.performed += OnShiftPerformed;
+            shiftAction.Enable();
+        }
     }
 
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        if (shiftAction != null)
+        {
+            shiftAction.performed -= OnShiftPerformed;
+        }
     }
 
     void Start()
@@ -80,14 +98,22 @@ public class RealityManager : MonoBehaviour
         OnRealityChange?.Invoke(currentReality);
     }
 
-    void Update()
+    private void OnShiftPerformed(InputAction.CallbackContext ctx)
     {
-        bool togglePressed = Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.Q);
-
-        if (togglePressed && Time.time >= lastToggleTime + toggleCooldown)
+        if (Time.time >= lastToggleTime + toggleCooldown)
         {
             ToggleReality();
         }
+    }
+
+    void Update()
+    {
+        // Update() is kept for mobile shift polling only.
+        // Desktop shift is handled via the InputAction callback above.
+#if UNITY_ANDROID || UNITY_IOS
+        // Mobile shift is consumed by PlayerController and forwarded via
+        // RealityManager.Instance.ToggleReality() directly — no polling needed here.
+#endif
     }
 
     public void ToggleReality()

@@ -14,7 +14,9 @@ public class PoolingSetupHelper : MonoBehaviour
         "   Pool Name: 'Death' → Prefab: Death Effect\n" +
         "   Pool Name: 'MoveDust' → Prefab: MoveDust\n" +
         "   Pool Name: 'RealityShift' → Prefab: ShiftEffect\n" +
-        "   Pool Name: 'CoinCollect' → Prefab: (Your coin particle)\n\n" +
+        "   Pool Name: 'CoinCollect' → Prefab: (Your coin particle)\n" +
+        "   Pool Name: 'EchoSpawn' → Prefab: EchoSpawnEffect (World 2)\n" +
+        "   Pool Name: 'GravityZone' → Prefab: GravityZoneParticle (World 2)\n\n" +
         "3. UPDATE PREFABS\n" +
         "   Player → Set pool names (JumpDust, Death, MoveDust)\n" +
         "   Coin → Set pool name (CoinCollect)\n" +
@@ -42,6 +44,8 @@ public class PoolingSetupHelper : MonoBehaviour
         ShowPoolStats("MoveDust");
         ShowPoolStats("RealityShift");
         ShowPoolStats("CoinCollect");
+        ShowPoolStats("EchoSpawn");
+        ShowPoolStats("GravityZone");
         
         GUILayout.EndArea();
     }

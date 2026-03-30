@@ -616,7 +616,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinsCollected: 0
   coinsCollectedThisLevel: 0
-  hintsUsed: 0
   hintCost: 5
   freeHintCount: 2
 --- !u!114 &733013155

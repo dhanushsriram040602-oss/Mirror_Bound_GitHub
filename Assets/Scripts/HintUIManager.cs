@@ -77,7 +77,7 @@ public class HintUIManager : MonoBehaviour
             return;
         }
 
-        bool hasFreehints = GameManager.Instance.hintsUsed < GameManager.Instance.freeHintCount;
+        bool hasFreehints = GameManager.Instance.HintsUsed < GameManager.Instance.freeHintCount;
 
         if (hasFreehints || hintUnlockedForThisLevel)
         {
@@ -99,7 +99,7 @@ public class HintUIManager : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        if (GameManager.Instance.hintsUsed < GameManager.Instance.freeHintCount)
+        if (GameManager.Instance.HintsUsed < GameManager.Instance.freeHintCount)
         {
             // Use TryUseHint so the change is persisted via PlayerPrefs.
             GameManager.Instance.TryUseHint();

@@ -114,7 +114,10 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            UpdateCoinUI(GameManager.Instance.coinsCollected);
+            UpdateCoinUI(
+                GameManager.Instance.coinsCollectedThisLevel,
+                GameManager.Instance.coinsCollected
+            );
         }
     }
 
@@ -144,11 +147,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateCoinUI(int count)
+    /// <summary>
+    /// Refreshes the coin HUD. Shows coins collected this level (in-level
+    /// progress) alongside the persistent wallet total.
+    /// </summary>
+    public void UpdateCoinUI(int levelCoins, int totalCoins)
     {
         if (coinText != null)
         {
-            coinText.text = " " + count.ToString();
+            coinText.text = $"{levelCoins}  ({totalCoins})";
         }
     }
 }

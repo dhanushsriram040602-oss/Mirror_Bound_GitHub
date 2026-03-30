@@ -157,5 +157,10 @@ public class WinMenu : MonoBehaviour
             LevelManager.Instance.UnlockNextLevel(currentLevelIndex);
             LevelManager.Instance.SaveLevelStars(currentLevelIndex, starsEarned);
         }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.CommitLevelCoins();
+        }
     }
 }
