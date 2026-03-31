@@ -590,6 +590,10 @@ MonoBehaviour:
     particlePrefab: {fileID: 2347573663697254191, guid: 3cf30a707989f89459ca7e277a316bce, type: 3}
     initialSize: 4
     expandable: 1
+  - poolName: EnemyDeath
+    particlePrefab: {fileID: 1867589525061250673, guid: 0ed5717a902d87f498c9cbf83262101a, type: 3}
+    initialSize: 4
+    expandable: 1
   autoReturnParticles: 0
 --- !u!1001 &836300385
 PrefabInstance:

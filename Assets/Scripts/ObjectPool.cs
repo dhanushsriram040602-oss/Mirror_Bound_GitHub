@@ -40,19 +40,25 @@ public class ObjectPool<T> where T : Component
 
     public T Get(Vector3 position, Quaternion rotation)
     {
-        T obj;
+        T obj = null;
 
-        if (availableObjects.Count > 0)
+        // Drain any destroyed entries the queue may have accumulated.
+        while (availableObjects.Count > 0)
         {
-            obj = availableObjects.Dequeue();
+            T candidate = availableObjects.Dequeue();
+            if (candidate != null)
+            {
+                obj = candidate;
+                break;
+            }
         }
-        else if (expandable)
+
+        if (obj == null)
         {
-            obj = CreateNewObject(); // Expand: create without adding to queue
-        }
-        else
-        {
-            return null;
+            if (expandable)
+                obj = CreateNewObject();
+            else
+                return null;
         }
 
         obj.transform.position = position;
@@ -65,7 +71,14 @@ public class ObjectPool<T> where T : Component
 
     public void Return(T obj)
     {
-        if (obj == null || !activeObjects.Contains(obj))
+        if (obj == null)
+        {
+            // Purge any other destroyed entries from activeObjects while we're here.
+            activeObjects.RemoveWhere(o => o == null);
+            return;
+        }
+
+        if (!activeObjects.Contains(obj))
             return;
 
         obj.gameObject.SetActive(false);
@@ -77,11 +90,9 @@ public class ObjectPool<T> where T : Component
     {
         foreach (T obj in activeObjects)
         {
-            if (obj != null)
-            {
-                obj.gameObject.SetActive(false);
-                availableObjects.Enqueue(obj);
-            }
+            if (obj == null) continue;
+            obj.gameObject.SetActive(false);
+            availableObjects.Enqueue(obj);
         }
         activeObjects.Clear();
     }
