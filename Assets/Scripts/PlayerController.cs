@@ -216,6 +216,9 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(newSpeedX, rb.linearVelocity.y);
 
         // Better Gravity
+#if !UNITY_ANDROID && !UNITY_IOS
+        InputAction jumpActionFixed = InputSystem.actions.FindAction("Player/Jump");
+#endif
         if (rb.linearVelocity.y < 0)
         {
             rb.linearVelocity += Vector2.up * Physics2D.gravity.y *
@@ -224,7 +227,6 @@ public class PlayerController : MonoBehaviour
 #if UNITY_ANDROID || UNITY_IOS
         else if (rb.linearVelocity.y > 0 && !MobileInput.jumpHeld)
 #else
-        InputAction jumpActionFixed = InputSystem.actions.FindAction("Player/Jump");
         else if (rb.linearVelocity.y > 0 && (jumpActionFixed == null || !jumpActionFixed.IsPressed()))
 #endif
         {

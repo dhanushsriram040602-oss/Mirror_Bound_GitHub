@@ -174,3 +174,4 @@ MonoBehaviour:
   moveSpeed: 3.5
   lifetime: 2.5
   ringColor: {r: 2, g: 1, b: 0, a: 1}
+  chargeWindupDuration: 0.4
