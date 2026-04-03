@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6385413293142246913}
   - component: {fileID: 1394308442602959682}
   - component: {fileID: 1177767905207825583}
-  - component: {fileID: 3378814659168286714}
   - component: {fileID: 3692040746493896827}
   m_Layer: 7
   m_Name: Switch
@@ -140,23 +139,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &3378814659168286714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3037138095501901355}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71c05d0c23dce3c4dbc0942c3e863199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectReality: 1
-  colorA: {r: 1, g: 0.5019608, b: 0, a: 1}
-  colorB: {r: 1, g: 1, b: 1, a: 1}
-  colorBoth: {r: 1, g: 1, b: 1, a: 1}
-  ghostAlpha: 0.022
 --- !u!114 &3692040746493896827
 MonoBehaviour:
   m_ObjectHideFlags: 0
